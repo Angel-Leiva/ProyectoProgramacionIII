@@ -1,7 +1,7 @@
-package personas.presentation.personas;
+package Sistema.presentation.personas;
 
-import personas.logic.Persona;
-import personas.logic.Service;
+import Sistema.logic.Persona;
+import Sistema.logic.Service;
 
 public class Controller {
     View view;

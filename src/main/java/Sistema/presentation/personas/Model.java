@@ -1,7 +1,7 @@
-package personas.presentation.personas;
+package Sistema.presentation.personas;
 
-import personas.logic.Persona;
-import personas.presentation.personas.AbstractModel;
+import Sistema.logic.Persona;
+
 import java.beans.PropertyChangeListener;
 
 public class Model extends AbstractModel {

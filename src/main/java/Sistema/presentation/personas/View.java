@@ -1,7 +1,6 @@
-package personas.presentation.personas;
+package Sistema.presentation.personas;
 
-import personas.logic.Persona;
-import personas.presentation.Highlighter;
+import Sistema.presentation.Highlighter;
 
 import javax.swing.*;
 import java.awt.*;

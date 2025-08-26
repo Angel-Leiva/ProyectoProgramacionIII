@@ -1,4 +1,4 @@
-package personas.presentation;
+package Sistema.presentation;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;

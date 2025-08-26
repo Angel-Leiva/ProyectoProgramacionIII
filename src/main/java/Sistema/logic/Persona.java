@@ -1,4 +1,4 @@
-package personas.logic;
+package Sistema.logic;
 
 public class Persona {
     private String id;

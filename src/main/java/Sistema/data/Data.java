@@ -1,6 +1,6 @@
-package personas.data;
+package Sistema.data;
 
-import personas.logic.Persona;
+import Sistema.logic.Persona;
 
 import java.util.ArrayList;
 import java.util.List;

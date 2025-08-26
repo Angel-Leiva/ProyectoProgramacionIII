@@ -1,6 +1,6 @@
-package personas.logic;
+package Sistema.logic;
 
-import personas.data.Data;
+import Sistema.data.Data;
 
 public class Service {
     private static Service theInstance;

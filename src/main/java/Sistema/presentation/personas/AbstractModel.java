@@ -1,4 +1,4 @@
-package personas.presentation.personas;
+package Sistema.presentation.personas;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;

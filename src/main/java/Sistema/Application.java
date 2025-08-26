@@ -1,8 +1,8 @@
-package personas;
+package Sistema;
 
-import personas.presentation.personas.Controller;
-import personas.presentation.personas.Model;
-import personas.presentation.personas.View;
+import Sistema.presentation.personas.Controller;
+import Sistema.presentation.personas.Model;
+import Sistema.presentation.personas.View;
 
 import javax.swing.*;
 import java.awt.*;
