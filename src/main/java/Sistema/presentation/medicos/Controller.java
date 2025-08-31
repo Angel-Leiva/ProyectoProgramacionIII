@@ -20,14 +20,14 @@ public class Controller {
         view.setModel(model);
 
         // cargar lista inicial
-        model.setList(service.medicoAll());
+        refrescar();
     }
 
     public void guardar(String id, String clave, String nombre, String especialidad) throws Exception {
         Medico m = new Medico(id, clave, nombre, especialidad);
         service.medicoCreate(m);
         model.setCurrent(m);
-        model.setList(service.medicoAll());
+        refrescar();
     }
 
     public void buscar(String filtro) throws Exception {
@@ -41,7 +41,10 @@ public class Controller {
     public void borrar(String id) throws Exception {
         Medico m = service.medicoRead(id);
         service.medicoAll().remove(m);
+        refrescar();
+    }
+
+    public void refrescar() {
         model.setList(service.medicoAll());
     }
 }
-
