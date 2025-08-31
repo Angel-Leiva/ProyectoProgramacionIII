@@ -1,208 +1,178 @@
 package Sistema.presentation.medicos;
 
+import Sistema.logic.Medico;
 import Sistema.presentation.Highlighter;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 public class View implements PropertyChangeListener {
-    private JPanel panel;
-    private JTextField idFld;
-    private JTextField nombreFld;
-    private JRadioButton sexoFldMasc;
-    private JRadioButton sexoFldFem;
-    private JComboBox estadoFld;
-    private JCheckBox pasatiempoFldMusica;
-    private JCheckBox pasatiempoFldCine;
-    private JCheckBox pasatiempoFldDeporte;
-    private JCheckBox pasatiempoFldVideoJuegos;
-    private JCheckBox pasatiempoFldCocina;
-    private JCheckBox pasatiempoFldOtro;
-    private JTextField pasatiempoFldOtroDescripcion;
-    private JButton guardarFld;
-    private JButton cancelarFld;
-    private JButton consultarFld;
+    private JPanel panel1;
+    private JTable listado;
+    private JTextField idMedico;
+    private JTextField nombreMedico;
+    private JButton guardar;
+    private JButton cancelar;
+    private JTextField especialidad;
+    private JButton borrar;
+    private JTextField nombreBusqueda;
+    private JButton buscar;
+    private JButton reporte;
 
-    private boolean validarCampos() {
-        boolean valido = true;
+    private Controller controller;
+    private Model model;
 
-        // resetear colores a blanco antes de validar
-        idFld.setBackground(Color.white);
-        nombreFld.setBackground(Color.white);
-        estadoFld.setBackground(Color.white);
-
-        if (idFld.getText().trim().isEmpty()) {
-            idFld.setBackground(Color.pink); // o Color.red, pero pink es más suave
-            valido = false;
-        }
-        if (nombreFld.getText().trim().isEmpty()) {
-            nombreFld.setBackground(Color.pink);
-            valido = false;
-        }
-        if (!sexoFldMasc.isSelected() && !sexoFldFem.isSelected()) {
-            sexoFldMasc.setBackground(Color.pink);
-            sexoFldFem.setBackground(Color.pink);
-            valido = false;
-        } else {
-            sexoFldMasc.setBackground(panel.getBackground());
-            sexoFldFem.setBackground(panel.getBackground());
-        }
-        if (estadoFld.getSelectedIndex() == -1) {
-            estadoFld.setBackground(Color.pink);
-            valido = false;
-        }
-
-        return valido;
-    }
-
-
+    // --- Constructor ---
     public View() {
+        // Configuración inicial del JTable
+        listado.setModel(new DefaultTableModel(
+                new Object[][]{},
+                new String[]{"ID", "Nombre", "Especialidad"}
+        ));
 
-        consultarFld.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e){
-                try {
-                    controller.read(idFld.getText());
-                } catch (Exception ex){
-                    JOptionPane.showMessageDialog(panel, ex.getMessage(),
-                            "Información", JOptionPane.INFORMATION_MESSAGE);
-                }
-            }
-        });
-
-
-
-        guardarFld.addActionListener(new ActionListener() {
+        // Evento Guardar
+        guardar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     if (!validarCampos()) {
-                        JOptionPane.showMessageDialog(panel,
+                        JOptionPane.showMessageDialog(panel1,
                                 "Complete los campos en rojo antes de guardar",
                                 "Error de validación",
                                 JOptionPane.WARNING_MESSAGE);
                         return;
                     }
 
-                    String id = idFld.getText();
-                    String nombre = nombreFld.getText();
-                    char sexo = sexoFldMasc.isSelected() ? 'M' :
-                            sexoFldFem.isSelected() ? 'F' : ' ';
-                    String estado = (String) estadoFld.getSelectedItem();
+                    controller.guardar(
+                            idMedico.getText(),
+                            idMedico.getText(), // la clave inicial = id
+                            nombreMedico.getText(),
+                            especialidad.getText()
+                    );
 
-                    controller.guardar(id, nombre, sexo, estado);
+                    JOptionPane.showMessageDialog(panel1,
+                            "Médico guardado con éxito",
+                            "Información",
+                            JOptionPane.INFORMATION_MESSAGE);
 
-                    JOptionPane.showMessageDialog(panel, "Persona guardada con éxito",
-                            "Información", JOptionPane.INFORMATION_MESSAGE);
-
-                    // limpiar campos
-                    idFld.setText("");
-                    nombreFld.setText("");
-                    sexoFldMasc.setSelected(false);
-                    sexoFldFem.setSelected(false);
-                    estadoFld.setSelectedIndex(-1);
-                    pasatiempoFldMusica.setSelected(false);
-                    pasatiempoFldCine.setSelected(false);
-                    pasatiempoFldDeporte.setSelected(false);
-                    pasatiempoFldVideoJuegos.setSelected(false);
-                    pasatiempoFldCocina.setSelected(false);
-                    pasatiempoFldOtro.setSelected(false);
-                    pasatiempoFldOtroDescripcion.setText("");
-                    pasatiempoFldOtroDescripcion.setEnabled(false);
-
+                    limpiarCampos();
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(panel, ex.getMessage(),
+                    JOptionPane.showMessageDialog(panel1, ex.getMessage(),
                             "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
 
-
-
-
-        pasatiempoFldOtro.addItemListener(new ItemListener() {
+        // Evento Cancelar
+        cancelar.addActionListener(new ActionListener() {
             @Override
-            public void itemStateChanged(ItemEvent e) {
-                if (pasatiempoFldOtro.isSelected()) {
-                    pasatiempoFldOtroDescripcion.setEnabled(true);
-                } else {
-                    pasatiempoFldOtroDescripcion.setEnabled(false);
-                    pasatiempoFldOtroDescripcion.setText("");
+            public void actionPerformed(ActionEvent e) {
+                limpiarCampos();
+            }
+        });
+
+        // Evento Buscar
+        buscar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    controller.buscar(nombreBusqueda.getText());
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(panel1, ex.getMessage(),
+                            "Información", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         });
 
-        Highlighter highlighter = new Highlighter(Color.green);
-        idFld.addMouseListener(highlighter);
-        nombreFld.addMouseListener(highlighter);
-        sexoFldMasc.addMouseListener(highlighter);
-        sexoFldFem.addMouseListener(highlighter);
-        estadoFld.addMouseListener(highlighter);
-        pasatiempoFldMusica.addMouseListener(highlighter);
-        pasatiempoFldCine.addMouseListener(highlighter);
-        pasatiempoFldDeporte.addMouseListener(highlighter);
-        pasatiempoFldVideoJuegos.addMouseListener(highlighter);
-        pasatiempoFldCocina.addMouseListener(highlighter);
-        pasatiempoFldOtro.addMouseListener(highlighter);
-        pasatiempoFldOtroDescripcion.addMouseListener(highlighter);
-
-
-        cancelarFld.addActionListener(new ActionListener() {
+        // Evento Borrar
+        borrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                idFld.setText("");
-                nombreFld.setText("");
+                int row = listado.getSelectedRow();
+                if (row >= 0) {
+                    String id = listado.getValueAt(row, 0).toString();
+                    try {
+                        controller.borrar(id);
+                        JOptionPane.showMessageDialog(panel1,
+                                "Médico borrado con éxito",
+                                "Información",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(panel1, ex.getMessage(),
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(panel1,
+                            "Seleccione un médico de la lista para borrar",
+                            "Advertencia",
+                            JOptionPane.WARNING_MESSAGE);
+                }
             }
         });
+
+        // Highlighter para resaltar campos
+        Highlighter highlighter = new Highlighter(Color.green);
+        idMedico.addMouseListener(highlighter);
+        nombreMedico.addMouseListener(highlighter);
+        especialidad.addMouseListener(highlighter);
     }
 
+    // --- Validación de campos ---
+    private boolean validarCampos() {
+        boolean valido = true;
+        idMedico.setBackground(Color.white);
+        nombreMedico.setBackground(Color.white);
+        especialidad.setBackground(Color.white);
+
+        if (idMedico.getText().trim().isEmpty()) { idMedico.setBackground(Color.pink); valido = false; }
+        if (nombreMedico.getText().trim().isEmpty()) { nombreMedico.setBackground(Color.pink); valido = false; }
+        if (especialidad.getText().trim().isEmpty()) { especialidad.setBackground(Color.pink); valido = false; }
+
+        return valido;
+    }
+
+    // --- Limpiar campos ---
+    private void limpiarCampos() {
+        idMedico.setText("");
+        nombreMedico.setText("");
+        especialidad.setText("");
+    }
+
+    // --- Integración con MVC ---
     public JPanel getPanel() {
-        return panel;
+        return panel1;
     }
 
-    //-------- MVC ---------
-    Controller controller;
-    Model model;
-
-    public void setController(Controller controller) {
-        this.controller = controller;
-    }
-
+    public void setController(Controller controller) { this.controller = controller; }
     public void setModel(Model model) {
         this.model = model;
         model.addPropertyChangeListener(this);
     }
 
+    // --- Actualizar vista cuando el modelo cambia ---
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         switch (evt.getPropertyName()) {
             case Model.CURRENT:
-                idFld.setText(String.valueOf(model.getCurrent().getId()));
-                nombreFld.setText(String.valueOf(model.getCurrent().getNombre()));
-                char sexo = model.getCurrent().getSexo();
-                if (sexo == 'M') {
-                    sexoFldMasc.setSelected(true);
-                    sexoFldFem.setSelected(false);
-                } else if (sexo == 'F') {
-                    sexoFldFem.setSelected(true);
-                    sexoFldMasc.setSelected(false);
-                } else {
-                    sexoFldMasc.setSelected(false);
-                    sexoFldFem.setSelected(false);
-                }
-                estadoFld.setSelectedItem(model.getCurrent().getEstadoCivil());
+                Medico m = model.getCurrent();
+                idMedico.setText(m.getId());
+                nombreMedico.setText(m.getNombre());
+                especialidad.setText(m.getEspecialidad());
+                break;
+
+            case Model.LIST:
+                listado.setModel(new DefaultTableModel(
+                        model.getList().stream()
+                                .map(medico -> new Object[]{medico.getId(), medico.getNombre(), medico.getEspecialidad()})
+                                .toArray(Object[][]::new),
+                        new String[]{"ID", "Nombre", "Especialidad"}
+                ));
                 break;
         }
     }
-
-
-
 }
-
-

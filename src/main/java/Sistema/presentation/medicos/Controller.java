@@ -3,10 +3,13 @@ package Sistema.presentation.medicos;
 import Sistema.logic.Medico;
 import Sistema.logic.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class Controller {
     View view;
     Model model;
-    Service service;;
+    Service service;
 
     public Controller(View view, Model model) {
         this.view = view;
@@ -15,23 +18,30 @@ public class Controller {
 
         view.setController(this);
         view.setModel(model);
+
+        // cargar lista inicial
+        model.setList(service.medicoAll());
     }
 
-    public void read(String id) throws Exception {
-        Medico e = new Medico();
-        e.setId(id);
-        model.setCurrent(Service.instance().read(e));
+    public void guardar(String id, String clave, String nombre, String especialidad) throws Exception {
+        Medico m = new Medico(id, clave, nombre, especialidad);
+        service.medicoCreate(m);
+        model.setCurrent(m);
+        model.setList(service.medicoAll());
     }
 
-    public void guardar(String id, String nombre, char sexo, String estado) throws Exception {
-        Medico p = new Medico();
-        p.setId(id);
-        p.setNombre(nombre);
-        p.setSexo(sexo);
-        p.setEstadoCivil(estado);
-
-        service.create(p);   // llama al service
-        model.setCurrent(p); // actualiza el modelo
+    public void buscar(String filtro) throws Exception {
+        List<Medico> result = service.medicoAll().stream()
+                .filter(m -> m.getNombre().toLowerCase().contains(filtro.toLowerCase())
+                        || m.getId().contains(filtro))
+                .collect(Collectors.toList());
+        model.setList(result);
     }
 
+    public void borrar(String id) throws Exception {
+        Medico m = service.medicoRead(id);
+        service.medicoAll().remove(m);
+        model.setList(service.medicoAll());
+    }
 }
+

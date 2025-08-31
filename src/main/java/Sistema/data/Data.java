@@ -10,11 +10,11 @@ public class Data {
 
     public Data() {
         medicos = new ArrayList<>();
-        medicos.add(new Medico("111", "Juan Perez", 'M', "Soltero"));
-        medicos.add(new Medico("222", "Maria Lopez", 'F', "Casado"));
+        medicos.add(new Medico("101", "101", "Dr. Juan Pérez", "Pediatría"));
+        medicos.add(new Medico("102", "102", "Dra. María López", "Cardiología"));
     }
 
-    public List<Medico> getPersonas() {
+    public List<Medico> getMedicos() {
         return medicos;
     }
 }

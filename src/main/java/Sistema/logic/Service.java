@@ -1,43 +1,42 @@
 package Sistema.logic;
 
 import Sistema.data.Data;
+import java.util.List;
 
 public class Service {
     private static Service theInstance;
-
-    public static Service instance() {
-        if (theInstance == null) theInstance = new Service();
-        return theInstance;
-    }
-
     private Data data;
 
     private Service() {
         data = new Data();
     }
 
-    // =============== PERSONAS ===============
-    public void create(Medico e) throws Exception {
-         Medico result = data.getPersonas().stream()
-                .filter(i -> i.getId().equals(e.getId()))
+    public static Service instance() {
+        if (theInstance == null) theInstance = new Service();
+        return theInstance;
+    }
+
+    // ================= MÉDICOS =================
+    public void medicoCreate(Medico m) throws Exception {
+        Medico result = data.getMedicos().stream()
+                .filter(i -> i.getId().equals(m.getId()))
                 .findFirst()
                 .orElse(null);
         if (result == null) {
-            data.getPersonas().add(e);
+            data.getMedicos().add(m);
         } else {
-            throw new Exception("Persona ya existe");
+            throw new Exception("Médico ya existe");
         }
     }
 
-    public Medico read(Medico e) throws Exception {
-        Medico result = data.getPersonas().stream()
-                .filter(i -> i.getId().equals(e.getId()))
+    public Medico medicoRead(String id) throws Exception {
+        return data.getMedicos().stream()
+                .filter(i -> i.getId().equals(id))
                 .findFirst()
-                .orElse(null);
-        if (result != null) {
-            return result;
-        } else {
-            throw new Exception("Persona no existe");
-        }
+                .orElseThrow(() -> new Exception("Médico no existe"));
     }
- }
+
+    public List<Medico> medicoAll() {
+        return data.getMedicos();
+    }
+}
