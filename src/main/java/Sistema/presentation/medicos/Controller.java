@@ -1,6 +1,6 @@
-package Sistema.presentation.personas;
+package Sistema.presentation.medicos;
 
-import Sistema.logic.Persona;
+import Sistema.logic.Medico;
 import Sistema.logic.Service;
 
 public class Controller {
@@ -18,13 +18,13 @@ public class Controller {
     }
 
     public void read(String id) throws Exception {
-        Persona e = new Persona();
+        Medico e = new Medico();
         e.setId(id);
         model.setCurrent(Service.instance().read(e));
     }
 
     public void guardar(String id, String nombre, char sexo, String estado) throws Exception {
-        Persona p = new Persona();
+        Medico p = new Medico();
         p.setId(id);
         p.setNombre(nombre);
         p.setSexo(sexo);

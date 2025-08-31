@@ -1,4 +1,4 @@
-package Sistema.presentation.personas;
+package Sistema.presentation.medicos;
 
 import Sistema.presentation.Highlighter;
 

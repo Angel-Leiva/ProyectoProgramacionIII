@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="SISTEMA_PRESCRIPCION_Y_DESPACHO_DE_RECETAS" />
         <module name="Personas" />
       </profile>
     </annotationProcessing>

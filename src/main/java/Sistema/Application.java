@@ -1,8 +1,8 @@
 package Sistema;
 
-import Sistema.presentation.personas.Controller;
-import Sistema.presentation.personas.Model;
-import Sistema.presentation.personas.View;
+import Sistema.presentation.medicos.Controller;
+import Sistema.presentation.medicos.Model;
+import Sistema.presentation.medicos.View;
 
 import javax.swing.*;
 import java.awt.*;

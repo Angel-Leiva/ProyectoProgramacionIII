@@ -1,16 +1,17 @@
-package Sistema.presentation.personas;
+package Sistema.presentation.medicos;
 
-import Sistema.logic.Persona;
+import Sistema.logic.Medico;
+import Sistema.presentation.AbstractModel;
 
 import java.beans.PropertyChangeListener;
 
 public class Model extends AbstractModel {
-    Persona current;
+    Medico current;
 
     public static final String CURRENT = "current";
 
     public Model() {
-        current = new Persona();
+        current = new Medico();
     }
 
     @Override
@@ -19,11 +20,11 @@ public class Model extends AbstractModel {
         firePropertyChange(CURRENT);
     }
 
-    public Persona getCurrent() {
+    public Medico getCurrent() {
         return current;
     }
 
-    public void setCurrent(Persona current) {
+    public void setCurrent(Medico current) {
         this.current = current;
         firePropertyChange(CURRENT);
     }

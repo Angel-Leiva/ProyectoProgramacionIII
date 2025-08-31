@@ -17,8 +17,8 @@ public class Service {
     }
 
     // =============== PERSONAS ===============
-    public void create(Persona e) throws Exception {
-         Persona result = data.getPersonas().stream()
+    public void create(Medico e) throws Exception {
+         Medico result = data.getPersonas().stream()
                 .filter(i -> i.getId().equals(e.getId()))
                 .findFirst()
                 .orElse(null);
@@ -29,8 +29,8 @@ public class Service {
         }
     }
 
-    public Persona read(Persona e) throws Exception {
-        Persona result = data.getPersonas().stream()
+    public Medico read(Medico e) throws Exception {
+        Medico result = data.getPersonas().stream()
                 .filter(i -> i.getId().equals(e.getId()))
                 .findFirst()
                 .orElse(null);

@@ -1,20 +1,20 @@
 package Sistema.data;
 
-import Sistema.logic.Persona;
+import Sistema.logic.Medico;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Data {
-    private List<Persona> personas;
+    private List<Medico> medicos;
 
     public Data() {
-        personas = new ArrayList<>();
-        personas.add(new Persona("111", "Juan Perez", 'M', "Soltero"));
-        personas.add(new Persona("222", "Maria Lopez", 'F', "Casado"));
+        medicos = new ArrayList<>();
+        medicos.add(new Medico("111", "Juan Perez", 'M', "Soltero"));
+        medicos.add(new Medico("222", "Maria Lopez", 'F', "Casado"));
     }
 
-    public List<Persona> getPersonas() {
-        return personas;
+    public List<Medico> getPersonas() {
+        return medicos;
     }
 }

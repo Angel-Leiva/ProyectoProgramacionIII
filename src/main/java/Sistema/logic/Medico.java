@@ -1,6 +1,6 @@
 package Sistema.logic;
 
-public class Persona {
+public class Medico {
     private String id;
     private String nombre;
     private char sexo;
@@ -16,7 +16,7 @@ public class Persona {
     public static final char MASCULINO = 'M';
     public static final char FEMENINO = 'F';
 
-    public Persona(String id, String nombre, char sexo, String estadoCivil, boolean pasatiempoMusica, boolean pasatiempoCine, boolean pasatiempoDeporte, boolean pasatiempoVideoJuegos, boolean pasatiempoCocina, boolean pasatiempoOtro, String pasatiempoOtroTexto) {
+    public Medico(String id, String nombre, char sexo, String estadoCivil, boolean pasatiempoMusica, boolean pasatiempoCine, boolean pasatiempoDeporte, boolean pasatiempoVideoJuegos, boolean pasatiempoCocina, boolean pasatiempoOtro, String pasatiempoOtroTexto) {
         this.id = id;
         this.nombre = nombre;
         this.sexo = sexo;
@@ -30,10 +30,10 @@ public class Persona {
         this.pasatiempoOtroTexto = pasatiempoOtroTexto;
     }
 
-    public Persona(String id, String nombre, char sexo, String estadoCivil) {
+    public Medico(String id, String nombre, char sexo, String estadoCivil) {
         this(id, nombre,sexo, estadoCivil, false, false, false, false, false, false, "");
     }
-     public Persona(){
+     public Medico(){
         this("", "", MASCULINO, "", false, false, false, false, false, false, "");
      }
 
