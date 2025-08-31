@@ -2,6 +2,8 @@ package Sistema.data;
 
 import Sistema.logic.Medico;
 import Sistema.logic.Farmaceuta;
+import Sistema.logic.Paciente;
+import java.time.LocalDate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +11,7 @@ import java.util.List;
 public class Data {
     private List<Medico> medicos;
     private List<Farmaceuta> farmaceutas;
+    private List<Paciente> pacientes;
 
     public Data() {
         //Medico
@@ -19,6 +22,10 @@ public class Data {
         farmaceutas = new ArrayList<>();
         farmaceutas.add(new Farmaceuta("201", "201", "Ana Ramírez"));
         farmaceutas.add(new Farmaceuta("202", "202", "Carlos Jiménez"));
+        //Paciente
+        pacientes = new ArrayList<>();
+        pacientes.add(new Paciente("301", "Luis Herrera", LocalDate.of(1990, 5, 12), "8888-9999"));
+        pacientes.add(new Paciente("302", "Sofía Morales", LocalDate.of(1985, 8, 25), "7777-1234"));
     }
 
     public List<Medico> getMedicos() {
@@ -26,5 +33,8 @@ public class Data {
     }
     public List<Farmaceuta> getFarmaceutas() {
         return farmaceutas;
+    }
+    public List<Paciente> getPacientes() {
+        return pacientes;
     }
 }

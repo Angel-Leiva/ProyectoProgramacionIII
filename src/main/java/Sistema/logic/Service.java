@@ -3,6 +3,7 @@ package Sistema.logic;
 import Sistema.data.Data;
 import java.util.List;
 import Sistema.logic.Farmaceuta;
+import Sistema.logic.Paciente;
 
 public class Service {
     private static Service theInstance;
@@ -63,5 +64,29 @@ public class Service {
 
     public List<Farmaceuta> farmaceutaAll() {
         return data.getFarmaceutas();
+    }
+
+    //Paciente
+    public void pacienteCreate(Paciente p) throws Exception {
+        Paciente result = data.getPacientes().stream()
+                .filter(i -> i.getId().equals(p.getId()))
+                .findFirst()
+                .orElse(null);
+        if (result == null) {
+            data.getPacientes().add(p);
+        } else {
+            throw new Exception("Paciente ya existe");
+        }
+    }
+
+    public Paciente pacienteRead(String id) throws Exception {
+        return data.getPacientes().stream()
+                .filter(i -> i.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new Exception("Paciente no existe"));
+    }
+
+    public List<Paciente> pacienteAll() {
+        return data.getPacientes();
     }
 }

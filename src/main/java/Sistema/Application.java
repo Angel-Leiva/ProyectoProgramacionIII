@@ -4,6 +4,7 @@ import Sistema.presentation.medicos.Controller;
 import Sistema.presentation.medicos.Model;
 import Sistema.presentation.medicos.View;
 import Sistema.presentation.farmaceutas.*;
+import Sistema.presentation.pacientes.*;
 
 
 import javax.swing.*;
@@ -32,6 +33,13 @@ public class Application {
         Sistema.presentation.farmaceutas.Controller fController = new Sistema.presentation.farmaceutas.Controller(fView, fModel);
         tabs.addTab("Farmaceutas", fView.getPanel());
 
+        // ======= Paciente ========
+        Sistema.presentation.pacientes.View pView = new Sistema.presentation.pacientes.View();
+        Sistema.presentation.pacientes.Model pModel = new Sistema.presentation.pacientes.Model();
+        Sistema.presentation.pacientes.Controller pController =
+                new Sistema.presentation.pacientes.Controller(pView, pModel);
+        tabs.addTab("Pacientes", pView.getPanel());
+
         // ======== Evento cuando se cambia de pestaña ========
         tabs.addChangeListener(e -> {
             int index = tabs.getSelectedIndex();
@@ -43,6 +51,9 @@ public class Application {
                     break;
                 case "Farmaceutas":
                     fController.refrescar();
+                    break;
+                case "Pacientes":
+                    pController.refrescar();
                     break;
             }
         });
