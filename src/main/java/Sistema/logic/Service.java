@@ -4,6 +4,7 @@ import Sistema.data.Data;
 import java.util.List;
 import Sistema.logic.Farmaceuta;
 import Sistema.logic.Paciente;
+import Sistema.logic.Medicamento;
 
 public class Service {
     private static Service theInstance;
