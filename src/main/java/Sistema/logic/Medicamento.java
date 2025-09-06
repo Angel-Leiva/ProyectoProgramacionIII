@@ -11,6 +11,10 @@ public class Medicamento {
         this.presentacion = presentacion;
     }
 
+    public Medicamento() {
+        this("", "", "");
+    }
+
     public String getCodigo() {return codigo;}
     public void setCodigo(String codigo) {this.codigo = codigo;}
 

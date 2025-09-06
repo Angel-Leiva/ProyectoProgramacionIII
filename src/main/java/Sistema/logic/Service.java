@@ -90,4 +90,29 @@ public class Service {
     public List<Paciente> pacienteAll() {
         return data.getPacientes();
     }
+
+    //Medicamentos
+    public void medicamentoCreate(Medicamento m) throws Exception {
+        Medicamento result = data.getMedicamentos().stream()
+                .filter(i -> i.getCodigo().equals(m.getCodigo()))
+                .findFirst()
+                .orElse(null);
+        if (result == null) {
+            data.getMedicamentos().add(m);
+        } else {
+            throw new Exception("Medicamento ya existe");
+        }
+    }
+
+    public Medicamento medicamentoRead(String codigo) throws Exception {
+        return data.getMedicamentos().stream()
+                .filter(i -> i.getCodigo().equals(codigo))
+                .findFirst()
+                .orElseThrow(() -> new Exception("Medicamento no existe"));
+    }
+
+    public List<Medicamento> medicamentoAll() {
+        return data.getMedicamentos();
+    }
+
 }
