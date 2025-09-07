@@ -1,26 +1,14 @@
 package Sistema.logic;
 
-public class Farmaceuta {
-    private String id;
-    private String clave;
-    private String nombre;
-
-    public Farmaceuta(String id, String clave, String nombre) {
-        this.id = id;
-        this.clave = clave;
-        this.nombre = nombre;
-    }
+public class Farmaceuta extends Usuario {
 
     public Farmaceuta() {
-        this("", "", "");
+        super("", "", "", '2'); // por defecto tipo 2 = Farmaceuta
     }
 
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public Farmaceuta(String idN, String claveN, String nombreN) {
+        super(idN, claveN, nombreN, '2');
+    }
 
-    public String getClave() { return clave; }
-    public void setClave(String clave) { this.clave = clave; }
 
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
 }

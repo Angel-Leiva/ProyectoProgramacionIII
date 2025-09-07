@@ -2,15 +2,12 @@ package Sistema.logic;
 
 import java.time.LocalDate;
 
-public class Paciente {
-    private String id;
-    private String nombre;
+public class Paciente extends Usuario{
     private LocalDate fechaNacimiento;
     private String telefono;
 
-    public Paciente(String id, String nombre, LocalDate fechaNacimiento, String telefono) {
-        this.id = id;
-        this.nombre = nombre;
+    public Paciente(String idN, String nombreN, LocalDate fechaNacimiento, String telefono) {
+        super(idN, "", nombreN, '3');
         this.fechaNacimiento = fechaNacimiento;
         this.telefono = telefono;
     }
@@ -18,12 +15,6 @@ public class Paciente {
     public Paciente() {
         this("", "", LocalDate.now(), "");
     }
-
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
-
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
 
     public LocalDate getFechaNacimiento() { return fechaNacimiento; }
     public void setFechaNacimiento(LocalDate fechaNacimiento) { this.fechaNacimiento = fechaNacimiento; }
