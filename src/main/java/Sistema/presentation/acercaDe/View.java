@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.net.URL;
 
 public class View{ //implements PropertyChangeListener{
     private JPanel panelImagen;
@@ -16,6 +17,13 @@ public class View{ //implements PropertyChangeListener{
 
     public View() {
 
+        URL url = getClass().getResource("/Sistema/recursos/HospitalProyecto.jpg");
+
+        if (url == null) {
+            System.out.println("❌ Imagen no encontrada");
+        } else {
+            System.out.println("✅ Imagen cargada: " + url);
+        }
 
     }
 
