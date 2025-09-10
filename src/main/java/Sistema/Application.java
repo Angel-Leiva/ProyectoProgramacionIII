@@ -62,6 +62,16 @@ public class Application {
                     new Sistema.presentation.prescribir.Controller(prescModel, prescView);
             tabs.addTab("Prescribir", prescView.getPanel1());
 
+
+            // ======== Acerca de ========
+            Sistema.presentation.acercaDe.View acercaView = new Sistema.presentation.acercaDe.View();
+            Sistema.presentation.acercaDe.Model acercaModel = new Sistema.presentation.acercaDe.Model();
+            Sistema.presentation.acercaDe.Controller acercaController =
+                    new Sistema.presentation.acercaDe.Controller(acercaView, acercaModel);
+            tabs.addTab("Acerca de...", acercaView.getMainPanel());
+
+
+
             // ======== Refrescar según pestaña ========
             tabs.addChangeListener(e -> {
                 int index = tabs.getSelectedIndex();
