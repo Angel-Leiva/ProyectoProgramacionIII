@@ -1,34 +1,27 @@
 package Sistema;
 
 import Sistema.logic.Sesion;
-import Sistema.presentation.medicos.Controller;
-import Sistema.presentation.medicos.Model;
-import Sistema.presentation.medicos.View;
-import Sistema.presentation.farmaceutas.*;
-import Sistema.presentation.pacientes.*;
-import Sistema.presentation.medicamentos.*;
-import Sistema.Login.View.*;
-import Sistema.Login.Controller.*;
-import Sistema.logic.Sesion.*;
+
+import Sistema.presentation.login.*;
 
 import javax.swing.*;
 
 public class Application {
     public static void main(String[] args) {
-        try { UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel"); }
-        catch (Exception ex) {}
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        } catch (Exception ex) {}
 
+// ======== LOGIN ========
+        Sistema.presentation.login.View loginView = new Sistema.presentation.login.View();
+        Sistema.presentation.login.Model loginModel = new Sistema.presentation.login.Model();
+        Sistema.presentation.login.Controller loginController = new Sistema.presentation.login.Controller(loginView, loginModel);
 
-        /*
-        *
-        * ARREGLAR NOMBRES DE MVC. PORQUE SE LLAMAN IGUAL QUE EL DEL MAIN xd.
-        *
-        * View loginView = new View();
-        new Controller(loginView);
-        View.setVisible(true);
-        *
-        */
+        loginView.pack();
+        loginView.setLocationRelativeTo(null);
+        loginView.setVisible(true);
 
+        //Si LOGIN funciona
         if (Sesion.isLoggedIn()) {
             System.out.println("Usuario conectado: " + Sesion.getUsuario().getNombre());
             JFrame window = new JFrame("Hospital - Sistema de Recetas");
@@ -38,33 +31,35 @@ public class Application {
             // Tabs
             JTabbedPane tabs = new JTabbedPane();
 
-            // ======== Médicos ========
-            View medicoView = new View();
-            Model medicoModel = new Model();
-            Controller medicoController = new Controller(medicoView, medicoModel);
+            // Médicos
+            Sistema.presentation.medicos.View medicoView = new Sistema.presentation.medicos.View();
+            Sistema.presentation.medicos.Model medicoModel = new Sistema.presentation.medicos.Model();
+            Sistema.presentation.medicos.Controller medicoController =
+                    new Sistema.presentation.medicos.Controller(medicoView, medicoModel);
             tabs.addTab("Médicos", medicoView.getPanel());
 
-            // ======== Farmaceutas ========
+            // Farmaceutas
             Sistema.presentation.farmaceutas.View fView = new Sistema.presentation.farmaceutas.View();
             Sistema.presentation.farmaceutas.Model fModel = new Sistema.presentation.farmaceutas.Model();
-            Sistema.presentation.farmaceutas.Controller fController = new Sistema.presentation.farmaceutas.Controller(fView, fModel);
+            Sistema.presentation.farmaceutas.Controller fController =
+                    new Sistema.presentation.farmaceutas.Controller(fView, fModel);
             tabs.addTab("Farmaceutas", fView.getPanel());
 
-            // ======= Paciente ========
+            // Pacientes
             Sistema.presentation.pacientes.View pView = new Sistema.presentation.pacientes.View();
             Sistema.presentation.pacientes.Model pModel = new Sistema.presentation.pacientes.Model();
             Sistema.presentation.pacientes.Controller pController =
                     new Sistema.presentation.pacientes.Controller(pView, pModel);
             tabs.addTab("Pacientes", pView.getPanel());
 
-            // ======= Medicamentos ========
+            // Medicamentos
             Sistema.presentation.medicamentos.View mView = new Sistema.presentation.medicamentos.View();
             Sistema.presentation.medicamentos.Model mModel = new Sistema.presentation.medicamentos.Model();
             Sistema.presentation.medicamentos.Controller mController =
                     new Sistema.presentation.medicamentos.Controller(mView, mModel);
             tabs.addTab("Medicamentos", mView.getPanel());
 
-            // ======== Evento cuando se cambia de pestaña ========
+            // Refrescar según pestaña
             tabs.addChangeListener(e -> {
                 int index = tabs.getSelectedIndex();
                 String title = tabs.getTitleAt(index);
@@ -85,16 +80,7 @@ public class Application {
             window.setContentPane(tabs);
             window.setVisible(true);
         } else {
-            for(int i=0;i<4;i++){
-                //Añadir indicación que diga en cual intento está.
-             if(i == 3){
-                //3 intentos de login. Arreglar...
-                System.out.println("No se inició sesión. Cerrando app...");
-                System.exit(0);}
-                }
-            }
+            System.exit(0); // 🔹 Si no se logra login, cerrar programa
         }
-
-
     }
-
+}

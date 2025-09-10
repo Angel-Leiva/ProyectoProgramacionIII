@@ -1,10 +1,8 @@
 package Sistema.data;
 
-import Sistema.logic.Medico;
-import Sistema.logic.Farmaceuta;
-import Sistema.logic.Paciente;
+import Sistema.logic.*;
+
 import java.time.LocalDate;
-import Sistema.logic.Medicamento;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +12,13 @@ public class Data {
     private List<Farmaceuta> farmaceutas;
     private List<Paciente> pacientes;
     private List<Medicamento> medicamentos;
+    private List<Administrador> administradores;
 
     public Data() {
+        //Administradores
+        administradores = new ArrayList<>();
+        administradores.add(new Administrador("000","admin","admin"));
+        administradores.add(new Administrador("001","admin1","admin1"));
         //Medico
         medicos = new ArrayList<>();
         medicos.add(new Medico("101", "101", "Dr. Juan Pérez", "Pediatría"));
@@ -43,4 +46,5 @@ public class Data {
         return pacientes;
     }
     public List<Medicamento> getMedicamentos() {return medicamentos;}
+    public List<Administrador> getAdministradores() {return administradores;}
 }

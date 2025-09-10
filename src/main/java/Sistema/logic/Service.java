@@ -2,9 +2,6 @@ package Sistema.logic;
 
 import Sistema.data.Data;
 import java.util.List;
-import Sistema.logic.Farmaceuta;
-import Sistema.logic.Paciente;
-import Sistema.logic.Medicamento;
 
 public class Service {
     private static Service theInstance;
@@ -114,5 +111,20 @@ public class Service {
     public List<Medicamento> medicamentoAll() {
         return data.getMedicamentos();
     }
+
+    // ================= ADMINISTRADORES =================
+    public List<Administrador> administradorAll() {
+        return data.getAdministradores();
+    }
+
+    //Los administradores son datos quemados. No se crean.
+
+    public Administrador administradorRead(String id) throws Exception {
+        return data.getAdministradores().stream()
+                .filter(i -> i.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new Exception("Administrador no existe"));
+    }
+
 
 }
