@@ -13,6 +13,7 @@ public class Data {
     private List<Paciente> pacientes;
     private List<Medicamento> medicamentos;
     private List<Administrador> administradores;
+    private List<Receta> recetas;
 
     public Data() {
         //Administradores
@@ -34,6 +35,8 @@ public class Data {
         //Medicamento
         medicamentos = new ArrayList<>();
         medicamentos.add(new Medicamento("ACE-111","Acetaminofen", "100 mg"));
+        //Receta
+        recetas = new ArrayList<>();
     }
 
     public List<Medico> getMedicos() {
@@ -47,4 +50,5 @@ public class Data {
     }
     public List<Medicamento> getMedicamentos() {return medicamentos;}
     public List<Administrador> getAdministradores() {return administradores;}
+    public List<Receta> getRecetas() { return recetas; }
 }

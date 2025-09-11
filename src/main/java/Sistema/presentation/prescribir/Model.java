@@ -1,38 +1,68 @@
 package Sistema.presentation.prescribir;
 
+import Sistema.logic.Paciente;
+import Sistema.logic.Receta;
+import Sistema.logic.RecetaMedicamento;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Model {
-    private String pacienteSeleccionado;
-    private List<String> medicamentos;
+    private Paciente pacienteSeleccionado;
+    private Receta recetaActual;
     private String fechaRetiro;
 
     public Model() {
-        this.medicamentos = new ArrayList<>();
+        this.recetaActual = new Receta();
     }
 
-    public String getPacienteSeleccionado() {
+    // ===================== Paciente =====================
+    public Paciente getPacienteSeleccionado() {
         return pacienteSeleccionado;
     }
 
-    public void setPacienteSeleccionado(String pacienteSeleccionado) {
+    public void setPacienteSeleccionado(Paciente pacienteSeleccionado) {
         this.pacienteSeleccionado = pacienteSeleccionado;
+        if (recetaActual != null) {
+            recetaActual.setPaciente(pacienteSeleccionado); // 👉 se guarda el puntero en la receta
+        }
     }
 
-    public List<String> getMedicamentos() {
-        return medicamentos;
+    // ===================== Medicamentos =====================
+    public List<RecetaMedicamento> getMedicamentos() {
+        return recetaActual.getMedicamentos();
     }
 
-    public void agregarMedicamento(String medicamento) {
-        this.medicamentos.add(medicamento);
+    public void agregarMedicamento(RecetaMedicamento medicamento) {
+        recetaActual.addMedicamento(medicamento);
     }
 
+    public void eliminarMedicamento(int index) {
+        if (index >= 0 && index < recetaActual.getMedicamentos().size()) {
+            recetaActual.getMedicamentos().remove(index);
+        }
+    }
+
+    // ===================== Fecha =====================
     public String getFechaRetiro() {
         return fechaRetiro;
     }
 
     public void setFechaRetiro(String fechaRetiro) {
         this.fechaRetiro = fechaRetiro;
+        // también la reflejamos en la receta
+        if (recetaActual != null && fechaRetiro != null && !fechaRetiro.isEmpty()) {
+            this.recetaActual.setFechaRetiro(java.time.LocalDate.parse(fechaRetiro));
+        }
+    }
+
+    // ===================== Receta completa =====================
+    public Receta getRecetaActual() {
+        return recetaActual;
+    }
+
+    public void setRecetaActual(Receta recetaActual) {
+        this.recetaActual = recetaActual;
     }
 }
+

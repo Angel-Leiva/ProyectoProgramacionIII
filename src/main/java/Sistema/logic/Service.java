@@ -2,6 +2,7 @@ package Sistema.logic;
 
 import Sistema.data.Data;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Service {
     private static Service theInstance;
@@ -88,6 +89,22 @@ public class Service {
         return data.getPacientes();
     }
 
+    public List<Paciente> buscarPacientesPorNombre(String filtro) {
+        return data.getPacientes().stream()
+                .filter(p -> p.getNombre().toLowerCase().contains(filtro.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
+    public List<Paciente> buscarPacientesPorId(String id) {
+        return data.getPacientes().stream()
+                .filter(p -> p.getId().equalsIgnoreCase(id))
+                .collect(Collectors.toList());
+    }
+
+    public List<Paciente> getPacientes() {
+        return data.getPacientes();
+    }
+
     //Medicamentos
     public void medicamentoCreate(Medicamento m) throws Exception {
         Medicamento result = data.getMedicamentos().stream()
@@ -124,6 +141,15 @@ public class Service {
                 .filter(i -> i.getId().equals(id))
                 .findFirst()
                 .orElseThrow(() -> new Exception("Administrador no existe"));
+    }
+
+    //Receta
+    public void recetaCreate(Receta r) {
+        data.getRecetas().add(r);
+    }
+
+    public List<Receta> recetaAll() {
+        return data.getRecetas();
     }
 
 
