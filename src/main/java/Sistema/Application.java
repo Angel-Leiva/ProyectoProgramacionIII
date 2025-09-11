@@ -62,6 +62,12 @@ public class Application {
                     new Sistema.presentation.prescribir.Controller(prescModel, prescView);
             tabs.addTab("Prescribir", prescView.getPanel1());
 
+            // ======== Historico ========
+            Sistema.presentation.Historico.View historicoView = new Sistema.presentation.Historico.View();
+            Sistema.presentation.Historico.Model historicoModel = new Sistema.presentation.Historico.Model();
+            Sistema.presentation.Historico.Controller historicoController =
+                    new Sistema.presentation.Historico.Controller(historicoView, historicoModel);
+            tabs.addTab("Historico", historicoView.getPanel());
 
             // ======== Acerca de ========
             Sistema.presentation.acercaDe.View acercaView = new Sistema.presentation.acercaDe.View();
@@ -69,8 +75,6 @@ public class Application {
             Sistema.presentation.acercaDe.Controller acercaController =
                     new Sistema.presentation.acercaDe.Controller(acercaView, acercaModel);
             tabs.addTab("Acerca de...", acercaView.getMainPanel());
-
-
 
             // ======== Refrescar según pestaña ========
             tabs.addChangeListener(e -> {
@@ -83,6 +87,7 @@ public class Application {
                     case "Pacientes": pController.refrescar(); break;
                     case "Medicamentos": mController.refrescar(); break;
                     case "Prescribir": /* no refresca, se maneja solo */ break;
+                    case "Historico": historicoController.refrescar(); break;
                 }
             });
 
