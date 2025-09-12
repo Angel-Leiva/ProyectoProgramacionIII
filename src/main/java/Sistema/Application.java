@@ -63,11 +63,7 @@ public class Application {
             tabs.addTab("Prescribir", prescView.getPanel1());
 
             // ======== Despacho ========
-            Sistema.presentation.despacho.View despachoView = new Sistema.presentation.despacho.View();
-            Sistema.presentation.despacho.Model despachoModel = new Sistema.presentation.despacho.Model();
-            Sistema.presentation.despacho.Controller despachoController =
-                    new Sistema.presentation.despacho.Controller(despachoModel, despachoView);
-            tabs.addTab("Despacho", despachoView.getPanel1()); // o getPanel() según tu View
+
 
             // ======== Historico ========
             Sistema.presentation.Historico.View historicoView = new Sistema.presentation.Historico.View();
@@ -94,7 +90,6 @@ public class Application {
                     case "Pacientes": pController.refrescar(); break;
                     case "Medicamentos": mController.refrescar(); break;
                     case "Prescribir": /* no refresca, se maneja solo */ break;
-                    case "Despacho": despachoController.refreshTable(); break;
                     case "Historico": historicoController.refrescar(); break;
                 }
             });
