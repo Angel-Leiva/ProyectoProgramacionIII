@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 public class Controller {
-    private Model prescribirModel;   // 👈 usamos el model de prescribir
+    private Model prescribirModel;   //usamos el model de prescribir
     private View view;
     private JLabel pacienteSeleccionadoEnPrescribir;
 
@@ -37,10 +37,10 @@ public class Controller {
                         String id = (String) view.getResultadosBusqueda().getValueAt(fila, 0); // columna 0 = ID
                         Paciente seleccionado = Service.instance().pacienteRead(id);
 
-                        // 👈 guardamos el puntero en el modelo de prescribir
+                        //guardamos el puntero en el modelo de prescribir
                         prescribirModel.setPacienteSeleccionado(seleccionado);
 
-                        // 👈 mostramos el nombre en el label
+                        //mostramos el nombre en el label
                         pacienteSeleccionadoEnPrescribir.setText(seleccionado.getNombre());
 
                         view.dispose(); // opcional: cerrar la ventana de búsqueda

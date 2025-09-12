@@ -24,7 +24,7 @@ public class Model {
     public void setPacienteSeleccionado(Paciente pacienteSeleccionado) {
         this.pacienteSeleccionado = pacienteSeleccionado;
         if (recetaActual != null) {
-            recetaActual.setPaciente(pacienteSeleccionado); // 👉 se guarda el puntero en la receta
+            recetaActual.setPaciente(pacienteSeleccionado); //se guarda el puntero en la receta
         }
     }
 
