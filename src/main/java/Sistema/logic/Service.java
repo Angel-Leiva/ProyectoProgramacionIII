@@ -73,7 +73,7 @@ public class Service {
     }
 
     public boolean cambiarClaveFarmaceuta(String id, String nuevaClave) throws Exception {
-        Farmaceuta f = farmaceutaRead(id); // Si no existe, lanza excepción
+        Farmaceuta f = farmaceutaRead(id);
         f.setClave(nuevaClave);
         return true;
     }

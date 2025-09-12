@@ -47,4 +47,9 @@ public class Controller {
     public void refrescar() {
         model.setList(service.farmaceutaAll());
     }
+
+    // ================= CAMBIO DE CONTRASEÑA =================
+    public boolean cambiarClave(String id, String nuevaClave) throws Exception {
+        return service.cambiarClaveFarmaceuta(id, nuevaClave);
+    }
 }

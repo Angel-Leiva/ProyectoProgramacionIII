@@ -21,16 +21,21 @@ public class View implements PropertyChangeListener {
     private JButton reporte;
     private JTable table1;
     private JPanel panel1;
+    private JPanel CambiarClave;
+    private JTextField claveNueva;
+    private JButton confirmarCambioDeContrasenaButton;
 
     private Controller controller;
     private Model model;
 
     public View() {
+        // Configuración de la tabla
         table1.setModel(new DefaultTableModel(
                 new Object[][]{},
                 new String[]{"ID", "Nombre"}
         ));
 
+        // Acción para guardar un nuevo farmaceuta
         guardar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -62,6 +67,7 @@ public class View implements PropertyChangeListener {
             }
         });
 
+        // Acción para limpiar campos
         limpiar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -69,6 +75,7 @@ public class View implements PropertyChangeListener {
             }
         });
 
+        // Acción para buscar farmaceuta
         buscar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -76,6 +83,47 @@ public class View implements PropertyChangeListener {
             }
         });
 
+        // Acción para cambiar la contraseña del farmaceuta seleccionado
+        confirmarCambioDeContrasenaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedRow = table1.getSelectedRow();
+                if (selectedRow == -1) {
+                    JOptionPane.showMessageDialog(panel1,
+                            "Seleccione un farmaceuta de la tabla",
+                            "Advertencia",
+                            JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                String idSeleccionado = (String) table1.getValueAt(selectedRow, 0);
+                String nuevaClave = claveNueva.getText().trim();
+
+                if (nuevaClave.isEmpty()) {
+                    JOptionPane.showMessageDialog(panel1,
+                            "Ingrese una nueva contraseña",
+                            "Error de validación",
+                            JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                try {
+                    boolean exito = controller.cambiarClave(idSeleccionado, nuevaClave);
+                    if (exito) {
+                        JOptionPane.showMessageDialog(panel1,
+                                "Contraseña cambiada con éxito para el farmaceuta con ID: " + idSeleccionado,
+                                "Éxito",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        claveNueva.setText("");
+                    }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(panel1, ex.getMessage(),
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        // Highlighter para campos
         Highlighter highlighter = new Highlighter(Color.green);
         idFarmaceuta.addMouseListener(highlighter);
         nombreFarmaceuta.addMouseListener(highlighter);
@@ -87,7 +135,9 @@ public class View implements PropertyChangeListener {
     }
 
     public JPanel getPanel() { return panel1; }
+
     public void setController(Controller controller) { this.controller = controller; }
+
     public void setModel(Model model) {
         this.model = model;
         model.addPropertyChangeListener(this);
