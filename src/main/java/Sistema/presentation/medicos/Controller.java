@@ -47,4 +47,11 @@ public class Controller {
     public void refrescar() {
         model.setList(service.medicoAll());
     }
+
+    public void cambiarClave(String id, String nuevaClave) throws Exception {
+        service.cambiarClaveMedico(id, nuevaClave);
+        Medico actualizado = service.medicoRead(id);
+        model.setCurrent(actualizado); // actualizamos el modelo
+    }
+
 }

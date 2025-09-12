@@ -41,7 +41,14 @@ public class Service {
         return data.getMedicos();
     }
 
-    //Farma
+    // CAMBIO DE CONTRASEÑA
+// ================= CAMBIO DE CONTRASEÑA MÉDICO =================
+    public void cambiarClaveMedico(String id, String nuevaClave) throws Exception {
+        Medico medico = medicoRead(id); // si no existe lanza excepción
+        medico.setClave(nuevaClave);
+    }
+
+    //Farmaceutas
     public void farmaceutaCreate(Farmaceuta f) throws Exception {
         Farmaceuta result = data.getFarmaceutas().stream()
                 .filter(i -> i.getId().equals(f.getId()))
@@ -64,6 +71,13 @@ public class Service {
     public List<Farmaceuta> farmaceutaAll() {
         return data.getFarmaceutas();
     }
+
+    public boolean cambiarClaveFarmaceuta(String id, String nuevaClave) throws Exception {
+        Farmaceuta f = farmaceutaRead(id); // Si no existe, lanza excepción
+        f.setClave(nuevaClave);
+        return true;
+    }
+
 
     //Paciente
     public void pacienteCreate(Paciente p) throws Exception {

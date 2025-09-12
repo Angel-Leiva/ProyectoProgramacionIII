@@ -23,6 +23,9 @@ public class View implements PropertyChangeListener {
     private JTextField nombreBusqueda;
     private JButton buscar;
     private JButton reporte;
+    private JPanel CambiarClave;
+    private JTextField claveNueva;
+    private JButton confirmarCambioDeContrasenaButton;
 
     private Controller controller;
     private Model model;
@@ -115,6 +118,48 @@ public class View implements PropertyChangeListener {
             }
         });
 
+        confirmarCambioDeContrasenaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    int fila = listado.getSelectedRow(); // ahora usamos listado
+                    if (fila == -1) {
+                        JOptionPane.showMessageDialog(panel1,
+                                "Debe seleccionar un médico de la lista",
+                                "Advertencia",
+                                JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+
+                    String id = listado.getValueAt(fila, 0).toString(); // ID del médico de la tabla
+                    String nuevaClave = claveNueva.getText().trim();
+
+                    if (nuevaClave.isEmpty()) {
+                        JOptionPane.showMessageDialog(panel1,
+                                "Debe ingresar una nueva contraseña",
+                                "Error de validación",
+                                JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+
+                    controller.cambiarClave(id, nuevaClave);
+
+                    JOptionPane.showMessageDialog(panel1,
+                            "Contraseña actualizada para el médico con ID: " + id,
+                            "Información",
+                            JOptionPane.INFORMATION_MESSAGE);
+
+                    claveNueva.setText(""); // limpiar campo
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(panel1,
+                            ex.getMessage(),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+
         // Highlighter para resaltar campos
         Highlighter highlighter = new Highlighter(Color.green);
         idMedico.addMouseListener(highlighter);
@@ -175,4 +220,5 @@ public class View implements PropertyChangeListener {
                 break;
         }
     }
+
 }
