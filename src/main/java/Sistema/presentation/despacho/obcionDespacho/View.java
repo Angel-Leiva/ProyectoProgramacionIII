@@ -18,6 +18,7 @@ public class View extends JFrame {
         estadoReceta.addItem("Pendiente");
         estadoReceta.addItem("Lista");
         estadoReceta.addItem("Entregada");
+        estadoReceta.addItem("Confeccionada");
     }
 
     public JComboBox<String> getEstadoReceta() {

@@ -53,6 +53,7 @@ public class Receta {
             case 'P': return "Pendiente";
             case 'L': return "Lista";
             case 'E': return "Entregada";
+            case 'C': return "Confeccionada";
             default: return "Desconocido";
         }
     }

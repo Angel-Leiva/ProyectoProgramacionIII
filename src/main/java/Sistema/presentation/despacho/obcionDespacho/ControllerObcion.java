@@ -27,6 +27,7 @@ public class ControllerObcion {
             if (estadoSeleccionado.equals("Pendiente")) receta.setEstado('P');
             if (estadoSeleccionado.equals("Lista")) receta.setEstado('L');
             if (estadoSeleccionado.equals("Entregada")) receta.setEstado('E');
+            if (estadoSeleccionado.equals("Confeccionada")) receta.setEstado('C');
 
             JOptionPane.showMessageDialog(view, "Estado actualizado");
             mainController.refrescar();
@@ -43,6 +44,7 @@ public class ControllerObcion {
                 case 'P': view.getEstadoReceta().setSelectedItem("Pendiente"); break;
                 case 'L': view.getEstadoReceta().setSelectedItem("Lista"); break;
                 case 'E': view.getEstadoReceta().setSelectedItem("Entregada"); break;
+                case 'C': view.getEstadoReceta().setSelectedItem("Confeccionada"); break;
             }
         }
     }

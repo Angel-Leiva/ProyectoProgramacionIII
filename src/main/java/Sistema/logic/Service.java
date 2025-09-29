@@ -166,5 +166,24 @@ public class Service {
         return data.getRecetas();
     }
 
+    public int getCantEstadoRecetas(char estado) {
+        int contador = 0;
+        switch (estado) {
+            case 'P':
+            case 'L':
+            case 'E':
+            case 'C':
+                for (Receta receta : data.getRecetas()) {
+                    if (receta.getEstado() == estado) {
+                        contador++;
+                    }
+                }
+                break;
+            default:
+                System.out.println("no sirvió");
+        }
+        return contador;
+    }
+
 
 }

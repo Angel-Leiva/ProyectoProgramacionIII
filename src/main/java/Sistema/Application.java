@@ -72,6 +72,13 @@ public class Application {
             Sistema.presentation.Historico.Controller historicoController =
                     new Sistema.presentation.Historico.Controller(historicoView, historicoModel);
 
+            //Dashboard
+            Sistema.presentation.dashboard.View dashboardView = new Sistema.presentation.dashboard.View();
+            Sistema.presentation.dashboard.Model dashboardModel = new Sistema.presentation.dashboard.Model();
+            Sistema.presentation.dashboard.Controller dashboardController =
+                    new Sistema.presentation.dashboard.Controller(dashboardModel,dashboardView);
+
+
             // Acerca de
             Sistema.presentation.acercaDe.View acercaView = new Sistema.presentation.acercaDe.View();
             Sistema.presentation.acercaDe.Model acercaModel = new Sistema.presentation.acercaDe.Model();
@@ -87,14 +94,17 @@ public class Application {
                 tabs.addTab("Prescribir", prescView.getPanel1());
                 tabs.addTab("Despacho", despachoView.getPanel());
                 tabs.addTab("Historico", historicoView.getPanel());
+                tabs.addTab("Dashboard", dashboardView.getPanel());
                 tabs.addTab("Acerca de...", acercaView.getMainPanel());
             } else if ("MEDICO".equals(rol)) {
                 tabs.addTab("Prescribir", prescView.getPanel1());
                 tabs.addTab("Pacientes", pView.getPanel());
                 tabs.addTab("Historico", historicoView.getPanel());
+                tabs.addTab("Dashboard", dashboardView.getPanel());
             } else if ("FARMACEUTA".equals(rol)) {
                 tabs.addTab("Despacho", despachoView.getPanel());
                 tabs.addTab("Historico", historicoView.getPanel());
+                tabs.addTab("Dashboard", dashboardView.getPanel());
             } else if ("PACIENTE".equals(rol)) {
                 tabs.addTab("Historico", historicoView.getPanel());
                 tabs.addTab("Acerca de...", acercaView.getMainPanel());
@@ -113,6 +123,8 @@ public class Application {
                     case "Medicamentos": mController.refrescar(); break;
                     case "Historico": historicoController.refrescar(); break;
                     case "Despacho": despachoController.refrescar(); break;
+                    case "Dashboard": dashboardController.refrescar(); break;
+
                 }
             });
 
