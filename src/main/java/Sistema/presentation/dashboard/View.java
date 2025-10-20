@@ -9,6 +9,7 @@ import java.beans.PropertyChangeListener;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 
@@ -39,7 +40,7 @@ public class View implements PropertyChangeListener{
 
 
         int anioActual = 2030;
-        int anioInicio = 2020;
+        int anioInicio = 2025;
 
         for (int i = anioInicio; i <= anioActual; i++) {
             desdeAnioComboB.addItem(i);
@@ -60,15 +61,20 @@ public class View implements PropertyChangeListener{
         }
 
         goodButton.addActionListener(e -> controller.filtrarComprasMedicamento());
+        doubleGoodButton.addActionListener(e->controller.todasLasComprasMedicamento());
 
     }
 
     public void initComboMedicamentos(List<Medicamento> medicamentos) {
-        comboBoxMedicamentos.removeAllItems(); // Limpiar por si acaso
+        comboBoxMedicamentos.removeAllItems(); // Limpia
 
         for (Medicamento m : medicamentos) {
             comboBoxMedicamentos.addItem(m.getNombre());
         }
+    }
+
+    public JTable getListaMedicamentos() {
+        return listaMedicamentos;
     }
 
 
@@ -87,20 +93,9 @@ public class View implements PropertyChangeListener{
                 Medicamento m = model.getCurrent();
                 break;
 
-//            case Sistema.presentation.dashboard.Model.LIST:
-//                listaMedicamentos.setModel(new DefaultTableModel(
-//                        model.getList().stream()
-//                                .map(med -> new Object[]{
-//                                        med.getNombre(),
-//
-//
-//
-//                                })
-//                                .toArray(Object[][]::new),
-//                        new String[]{"Medicamento", (String)desdeAnioComboB.getSelectedItem()+(String)desdeFechaComboB.getSelectedItem(),
-//                                (String)hastaAnioComboB.getSelectedItem()+(String)hastaFechaComboB.getSelectedItem()}
-//                ));
-//                break;
+            case Sistema.presentation.dashboard.Model.LIST:
+                initComboMedicamentos(model.getList());
+                break;
 
         }
     }
@@ -134,12 +129,28 @@ public class View implements PropertyChangeListener{
         return LocalDate.of(anio, mes, dia);
     }
 
-    public void actualizarTablaMedicamento(String nombreMed, long cantidad) {
+    public void actualizarTablaMedicamento(String nombreMed, Map<LocalDate, Long> conteoPorDia) {
         DefaultTableModel tableModel = new DefaultTableModel();
-        tableModel.addColumn("Medicamento");
-        tableModel.addColumn("Cantidad Comprada");
 
-        tableModel.addRow(new Object[]{nombreMed, cantidad});
+        // Definir columnas
+        tableModel.addColumn("Medicamento");
+        tableModel.addColumn("Fecha");
+        tableModel.addColumn("Cantidad Recetada");
+
+        // Formato de fecha
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-dd");
+
+        // Agregar filas con los datos del mapa
+        conteoPorDia.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey()) // ordenar por fecha
+                .forEach(entry -> {
+                    LocalDate fecha = entry.getKey();
+                    Long cantidad = entry.getValue();
+                    tableModel.addRow(new Object[]{nombreMed, fecha.format(formatter), cantidad});
+
+                });
+
+        // Establecer el nuevo modelo en la tabla
         listaMedicamentos.setModel(tableModel);
     }
 

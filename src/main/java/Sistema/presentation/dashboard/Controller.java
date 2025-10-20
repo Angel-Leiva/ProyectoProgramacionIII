@@ -31,6 +31,7 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 public class Controller {
     View view;
@@ -91,21 +92,6 @@ public class Controller {
 
     }
 
-//    public void buscar(String filtro) { //Busca por nombre o id
-//        List<Receta> result = service.recetaAll().stream()
-//                .filter(r -> r.getPaciente().getNombre().toLowerCase().contains(filtro.toLowerCase())
-//                        || r.getPaciente().getId().contains(filtro))
-//                .collect(Collectors.toList());
-//        model.setList(result);
-//    }
-
-//    public void seleccionarReceta(Receta receta) {
-//        model.setCurrent(receta); // Esto debería activar el propertyChange con Model.CURRENT
-//        model.setListaMedic(receta.getMedicamentos()); // <-- Asegúrate que esto exista
-//    }
-
-
-
     public void refrescar() {
         model.setList(service.medicamentoAll());
         model.setListaReceta(service.recetaAll());
@@ -120,32 +106,82 @@ public class Controller {
             String nombreMed = view.getMedicamentoSeleccionado();
             int desdeAnio = view.getDesdeAnioSeleccionado();
             int hastaAnio = view.getHastaAnioSeleccionado();
-            String desdeDiaMes = view.getDesdeFechaSeleccionada(); // Ej: "10 - Octubre"
+            String desdeDiaMes = view.getDesdeFechaSeleccionada();
             String hastaDiaMes = view.getHastaFechaSeleccionada();
 
             // Convertir día-mes-año a LocalDate
             LocalDate fechaInicio = view.convertirADate(desdeDiaMes, desdeAnio);
             LocalDate fechaFin = view.convertirADate(hastaDiaMes, hastaAnio);
 
-            // Obtener recetas entre esas fechas
-            List<Receta> recetas = service.recetaAll().stream()
+            // Filtrar recetas entre esas fechas
+            List<Receta> recetasFiltradas = service.recetaAll().stream()
                     .filter(r -> {
                         LocalDate f = r.getFechaRetiro();
                         return !f.isBefore(fechaInicio) && !f.isAfter(fechaFin);
                     })
                     .collect(Collectors.toList());
 
-            // Contar cuántas veces aparece el medicamento
-            long conteo = recetas.stream()
-                    .flatMap(r -> r.getMedicamentos().stream())
-                    .filter(rm -> rm.getMedicamento().getNombre().equalsIgnoreCase(nombreMed))
-                    .count();
+            // Map para contar cuántas veces se recetó el medicamento por día
+            Map<LocalDate, Long> conteoPorDia = recetasFiltradas.stream()
+                    .flatMap(r -> r.getMedicamentos().stream()
+                            .filter(rm -> rm.getMedicamento().getNombre().equalsIgnoreCase(nombreMed))
+                            .map(rm -> r.getFechaRetiro()))
+                    .collect(Collectors.groupingBy(fecha -> fecha, Collectors.counting()));
 
             // Mostrar en tabla
-            view.actualizarTablaMedicamento(nombreMed, conteo);
+            view.actualizarTablaMedicamento(nombreMed, conteoPorDia);
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Error al filtrar: " + ex.getMessage());
+        }
+    }
+
+    public void todasLasComprasMedicamento() {
+        try {
+            int desdeAnio = view.getDesdeAnioSeleccionado();
+            int hastaAnio = view.getHastaAnioSeleccionado();
+            String desdeDiaMes = view.getDesdeFechaSeleccionada();
+            String hastaDiaMes = view.getHastaFechaSeleccionada();
+
+            LocalDate fechaInicio = view.convertirADate(desdeDiaMes, desdeAnio);
+            LocalDate fechaFin = view.convertirADate(hastaDiaMes, hastaAnio);
+
+            List<Receta> recetasFiltradas = service.recetaAll().stream()
+                    .filter(r -> {
+                        LocalDate f = r.getFechaRetiro();
+                        return !f.isBefore(fechaInicio) && !f.isAfter(fechaFin);
+                    })
+                    .collect(Collectors.toList());
+
+            // Agrupar por medicamento y fecha
+            Map<String, Map<LocalDate, Long>> conteoPorMedicamentoYFecha = new TreeMap<>();
+
+            for (Receta receta : recetasFiltradas) {
+                LocalDate fecha = receta.getFechaRetiro();
+                receta.getMedicamentos().forEach(rm -> {
+                    String nombre = rm.getMedicamento().getNombre();
+                    conteoPorMedicamentoYFecha
+                            .computeIfAbsent(nombre, k -> new TreeMap<>())
+                            .merge(fecha, 1L, Long::sum);
+                });
+            }
+
+            // Crear modelo de tabla
+            DefaultTableModel tableModel = new DefaultTableModel();
+            tableModel.addColumn("Medicamento");
+            tableModel.addColumn("Fecha");
+            tableModel.addColumn("Cantidad Comprada");
+
+            conteoPorMedicamentoYFecha.forEach((medicamento, fechas) -> {
+                fechas.forEach((fecha, cantidad) -> {
+                    tableModel.addRow(new Object[]{medicamento, fecha.toString(), cantidad});
+                });
+            });
+
+            view.getListaMedicamentos().setModel(tableModel);
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error al mostrar todas las compras: " + ex.getMessage());
         }
     }
 

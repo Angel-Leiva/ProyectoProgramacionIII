@@ -58,7 +58,7 @@ public class View implements PropertyChangeListener {
                     );
 
                     JOptionPane.showMessageDialog(panel1,
-                            "Paciente guardado con éxito",
+                            "Medicamento guardado con éxito",
                             "Información",
                             JOptionPane.INFORMATION_MESSAGE);
 
