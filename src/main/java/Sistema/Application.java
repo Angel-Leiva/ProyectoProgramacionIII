@@ -2,6 +2,7 @@ package Sistema;
 
 import Sistema.logic.Sesion;
 import javax.swing.*;
+import java.awt.*;
 
 public class Application {
     public static void main(String[] args) {
@@ -86,28 +87,29 @@ public class Application {
                     new Sistema.presentation.acercaDe.Controller(acercaView, acercaModel);
 
             // ======== AGREGAR TABS SEGÚN ROL ========
+            int tamImg = 22;
             if ("ADMIN".equals(rol)) {
-                tabs.addTab("Médicos", medicoView.getPanel());
-                tabs.addTab("Farmaceutas", fView.getPanel());
-                tabs.addTab("Pacientes", pView.getPanel());
-                tabs.addTab("Medicamentos", mView.getPanel());
-                tabs.addTab("Prescribir", prescView.getPanel1());
-                tabs.addTab("Despacho", despachoView.getPanel());
-                tabs.addTab("Historico", historicoView.getPanel());
-                tabs.addTab("Dashboard", dashboardView.getPanel());
-                tabs.addTab("Acerca de...", acercaView.getMainPanel());
+                tabs.addTab("Médicos", getScaledIcon("/Sistema/recursos/Medico.png", tamImg, tamImg), medicoView.getPanel());
+                tabs.addTab("Farmaceutas", getScaledIcon("/Sistema/recursos/Farmaceuta.png", tamImg, tamImg), fView.getPanel());
+                tabs.addTab("Pacientes", getScaledIcon("/Sistema/recursos/Paciente.png", tamImg, tamImg), pView.getPanel());
+                tabs.addTab("Medicamentos", getScaledIcon("/Sistema/recursos/Medicamento.png", tamImg, tamImg), mView.getPanel());
+                tabs.addTab("Prescribir", getScaledIcon("/Sistema/recursos/Prescripcion.png", tamImg, tamImg), prescView.getPanel1());
+                tabs.addTab("Despacho", getScaledIcon("/Sistema/recursos/Despacho.png", tamImg, tamImg), despachoView.getPanel());
+                tabs.addTab("Historico", getScaledIcon("/Sistema/recursos/Historico.png", tamImg, tamImg), historicoView.getPanel());
+                tabs.addTab("Dashboard", getScaledIcon("/Sistema/recursos/Estadistica.png", tamImg, tamImg), dashboardView.getPanel());
+                tabs.addTab("Acerca de...", getScaledIcon("/Sistema/recursos/AcercaDe.png", tamImg, tamImg), acercaView.getMainPanel());
             } else if ("MEDICO".equals(rol)) {
-                tabs.addTab("Prescribir", prescView.getPanel1());
-                tabs.addTab("Pacientes", pView.getPanel());
-                tabs.addTab("Historico", historicoView.getPanel());
-                tabs.addTab("Dashboard", dashboardView.getPanel());
+                tabs.addTab("Prescribir", getScaledIcon("/Sistema/recursos/Prescripcion.png", tamImg, tamImg), prescView.getPanel1());
+                tabs.addTab("Pacientes", getScaledIcon("/Sistema/recursos/Paciente.png", tamImg, tamImg), pView.getPanel());
+                tabs.addTab("Historico", getScaledIcon("/Sistema/recursos/Historico.png", tamImg, tamImg), historicoView.getPanel());
+                tabs.addTab("Dashboard", getScaledIcon("/Sistema/recursos/Estadistica.png", tamImg, tamImg), dashboardView.getPanel());
             } else if ("FARMACEUTA".equals(rol)) {
-                tabs.addTab("Despacho", despachoView.getPanel());
-                tabs.addTab("Historico", historicoView.getPanel());
-                tabs.addTab("Dashboard", dashboardView.getPanel());
+                tabs.addTab("Despacho", getScaledIcon("/Sistema/recursos/Despacho.png", tamImg, tamImg), despachoView.getPanel());
+                tabs.addTab("Historico", getScaledIcon("/Sistema/recursos/Historico.png", tamImg, tamImg), historicoView.getPanel());
+                tabs.addTab("Dashboard", getScaledIcon("/Sistema/recursos/Estadistica.png", tamImg, tamImg), dashboardView.getPanel());
             } else if ("PACIENTE".equals(rol)) {
-                tabs.addTab("Historico", historicoView.getPanel());
-                tabs.addTab("Acerca de...", acercaView.getMainPanel());
+                tabs.addTab("Historico", getScaledIcon("/Sistema/recursos/Historico.png", tamImg, tamImg), historicoView.getPanel());
+                tabs.addTab("Acerca de...", getScaledIcon("/Sistema/recursos/AcercaDe.png", tamImg, tamImg), acercaView.getMainPanel());
             }
 
             // ======== Refrescar según pestaña ========
@@ -134,5 +136,15 @@ public class Application {
         } else {
             System.exit(0);
         }
+    }
+    public static ImageIcon getScaledIcon(String resourcePath, int width, int height) {
+        java.net.URL url = Application.class.getResource(resourcePath);
+        if (url == null) {
+            System.err.println("Imagen no encontrada " + resourcePath);
+            return null;
+        }
+        ImageIcon icon = new ImageIcon(url);
+        Image scaled = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        return new ImageIcon(scaled);
     }
 }
