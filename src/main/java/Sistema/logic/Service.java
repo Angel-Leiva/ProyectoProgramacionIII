@@ -1,6 +1,8 @@
 package Sistema.logic;
 
 import Sistema.data.Data;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -142,6 +144,23 @@ public class Service {
     public List<Medicamento> medicamentoAll() {
         return data.getMedicamentos();
     }
+
+    // ================= RecetaMedicamentos =================
+    public void eliminarRecetaMedicamento(String nombreMedicamento, LocalDate fecha) throws Exception {
+        Receta receta = recetaAll().stream()
+                .filter(r -> r.getFechaRetiro().equals(fecha))
+                .findFirst()
+                .orElseThrow(() -> new Exception("No se encontró una receta con esa fecha"));
+
+        boolean eliminado = receta.getMedicamentos().removeIf(rm ->
+                rm.getMedicamento().getNombre().equalsIgnoreCase(nombreMedicamento)
+        );
+
+        if (!eliminado) {
+            throw new Exception("No se encontró el medicamento en esa receta");
+        }
+    }
+
 
     // ================= ADMINISTRADORES =================
     public List<Administrador> administradorAll() {

@@ -36,6 +36,7 @@ public class Data {
         medicamentos = new ArrayList<>();
         medicamentos.add(new Medicamento("ACE-111","Acetaminofen", "100 mg"));
         medicamentos.add(new Medicamento("ACE-222","Acetaminofen", "500 mg"));
+        medicamentos.add(new Medicamento("IBU-111","Ibuprofeno", "100 mg"));
         //Receta
         recetas = new ArrayList<>();
     }

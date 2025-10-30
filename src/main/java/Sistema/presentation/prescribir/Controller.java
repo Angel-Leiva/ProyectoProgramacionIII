@@ -88,7 +88,7 @@ public class Controller {
             }
 
             Receta receta = new Receta();
-            receta.setPaciente(model.getPacienteSeleccionado()); // 🔥 guardamos el puntero al objeto
+            receta.setPaciente(model.getPacienteSeleccionado()); // guardamos el puntero al objeto
 
             if (view.getFechaRetiroMedi().getDate() != null) {
                 receta.setFechaRetiro(view.getFechaRetiroMedi().getDate());
@@ -96,7 +96,7 @@ public class Controller {
 
             DefaultTableModel tableModel = (DefaultTableModel) view.getListaMedicamentos().getModel();
             for (int i = 0; i < tableModel.getRowCount(); i++) {
-                String codigo = (String) tableModel.getValueAt(i, 0);
+                String codigo = (String) tableModel.getValueAt(i, 0); //IMPLEMENTAR ID PARA RECETA Y BORRAR LA REETA CON ESE ID
                 Medicamento med = Service.instance().medicamentoRead(codigo);
 
                 int cantidad = (int) tableModel.getValueAt(i, 2);

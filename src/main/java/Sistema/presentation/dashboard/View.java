@@ -4,6 +4,8 @@ import Sistema.logic.Medicamento;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.time.LocalDate;
@@ -62,6 +64,71 @@ public class View implements PropertyChangeListener{
 
         goodButton.addActionListener(e -> controller.filtrarComprasMedicamento());
         doubleGoodButton.addActionListener(e->controller.todasLasComprasMedicamento());
+        badButton.addActionListener(e -> {
+            int row = listaMedicamentos.getSelectedRow();
+            if (row >= 0) {
+                String nombreMedicamento = listaMedicamentos.getValueAt(row, 0).toString();
+                String fechaStr = listaMedicamentos.getValueAt(row, 1).toString();
+                LocalDate fecha = LocalDate.parse(fechaStr);
+
+                controller.borrarRecetaMedicamento(nombreMedicamento, fecha);
+            } else {
+                JOptionPane.showMessageDialog(panel1,
+                        "Seleccione una prescripcion para borrarla",
+                        "Advertencia",
+                        JOptionPane.WARNING_MESSAGE);
+            }
+        });
+        doubleBadButton.addActionListener(e -> {
+            int rowCount = listaMedicamentos.getRowCount();
+            if (rowCount == 0) {
+                JOptionPane.showMessageDialog(panel1,
+                        "No hay prescripciones mostradas.",
+                        "Advertencia",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            int confirm = JOptionPane.showConfirmDialog(
+                    panel1,
+                    "¿Seguro que deseas eliminar todas las recetas-medicamento visibles en la tabla?",
+                    "Confirmar la eliminación",
+                    JOptionPane.YES_NO_OPTION
+            );
+
+            if (confirm != JOptionPane.YES_OPTION) return;
+
+            try {
+                for (int i = 0; i < rowCount; i++) {
+                    String nombreMedicamento = listaMedicamentos.getValueAt(i, 0).toString();
+                    String fechaStr = listaMedicamentos.getValueAt(i, 1).toString();
+
+                    LocalDate fecha;
+                    try {
+                        fecha = LocalDate.parse(fechaStr);
+                    } catch (Exception ex) {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-dd");
+                        fecha = LocalDate.parse(fechaStr, formatter);
+                    }
+
+                    controller.borrarRecetaMedicamento(nombreMedicamento, fecha);
+                }
+
+                JOptionPane.showMessageDialog(panel1,
+                        "Todas las prescripciones se eliminaron correctamente.",
+                        "Éxito",
+                        JOptionPane.INFORMATION_MESSAGE);
+
+                controller.refrescar();
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(panel1,
+                        "Error al eliminar: " + ex.getMessage(),
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
 
     }
 

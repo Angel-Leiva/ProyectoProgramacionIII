@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Receta {
+    private String id;
     private Paciente paciente;
     private LocalDate fechaRetiro;
     private List<RecetaMedicamento> medicamentos = new ArrayList<>();
     private char estado;
 
     public Receta() {
+        this.id = "";
         this.paciente = null;
         this.fechaRetiro = LocalDate.now();
         this.estado = 'P';

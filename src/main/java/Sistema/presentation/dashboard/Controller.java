@@ -1,5 +1,6 @@
 package Sistema.presentation.dashboard;
 
+import Sistema.logic.Medico;
 import Sistema.logic.Receta;
 import Sistema.logic.Medicamento;
 import Sistema.logic.Service;
@@ -229,6 +230,16 @@ public class Controller {
         view.panelGraficoMedic.setLayout(new java.awt.BorderLayout());
         view.panelGraficoMedic.add(chartPanel, java.awt.BorderLayout.CENTER);
         view.panelGraficoMedic.validate();
+    }
+
+    public void borrarRecetaMedicamento(String nombreMedicamento, LocalDate fecha) {
+        try {
+            service.eliminarRecetaMedicamento(nombreMedicamento, fecha);
+            JOptionPane.showMessageDialog(null, "Prescripcion eliminada correctamente");
+            refrescar();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error al eliminar: " + ex.getMessage());
+        }
     }
 
 }
