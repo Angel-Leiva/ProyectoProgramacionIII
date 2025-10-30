@@ -10,6 +10,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
@@ -67,14 +68,27 @@ public class View implements PropertyChangeListener{
         badButton.addActionListener(e -> {
             int row = listaMedicamentos.getSelectedRow();
             if (row >= 0) {
-                String nombreMedicamento = listaMedicamentos.getValueAt(row, 0).toString();
-                String fechaStr = listaMedicamentos.getValueAt(row, 1).toString();
-                LocalDate fecha = LocalDate.parse(fechaStr);
+                try {
+                    // Obtener los datos necesarios de las columnas
+                    int numeroReceta = (int) listaMedicamentos.getValueAt(row, 3); // Columna "Receta ID"
+                    String codigoMedicamento = (String) listaMedicamentos.getValueAt(row, 4); // Columna "Med. Código"
 
-                controller.borrarRecetaMedicamento(nombreMedicamento, fecha);
+                    // Llamar al controller con los parámetros correctos
+                    controller.borrarRecetaMedicamento(numeroReceta, codigoMedicamento);
+                } catch (ClassCastException ex) {
+                    JOptionPane.showMessageDialog(panel1,
+                            "Error en el formato de datos de la tabla. Asegúrese de seleccionar una fila válida.",
+                            "Error de Datos",
+                            JOptionPane.ERROR_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(panel1,
+                            "Error al eliminar: " + ex.getMessage(),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             } else {
                 JOptionPane.showMessageDialog(panel1,
-                        "Seleccione una prescripcion para borrarla",
+                        "Seleccione una prescripción para borrarla",
                         "Advertencia",
                         JOptionPane.WARNING_MESSAGE);
             }
@@ -91,27 +105,35 @@ public class View implements PropertyChangeListener{
 
             int confirm = JOptionPane.showConfirmDialog(
                     panel1,
-                    "¿Seguro que deseas eliminar todas las recetas-medicamento visibles en la tabla?",
+                    "¿Seguro que deseas eliminar todas las prescripciones visibles en la tabla?",
                     "Confirmar la eliminación",
                     JOptionPane.YES_NO_OPTION
             );
 
             if (confirm != JOptionPane.YES_OPTION) return;
 
+            // Recopilar todos los elementos a borrar ANTES de empezar a borrarlos
+            // para evitar problemas con la tabla que cambia al refrescar.
+            List<Object[]> itemsToDelete = new ArrayList<>();
+            for (int i = 0; i < rowCount; i++) {
+                try {
+                    int numeroReceta = (int) listaMedicamentos.getValueAt(i, 3);
+                    String codigoMedicamento = (String) listaMedicamentos.getValueAt(i, 4);
+                    itemsToDelete.add(new Object[]{numeroReceta, codigoMedicamento});
+                } catch (ClassCastException ex) {
+                    JOptionPane.showMessageDialog(panel1,
+                            "Error en el formato de datos de la fila " + (i + 1) + ". No se puede eliminar por datos incorrectos.",
+                            "Error de Datos",
+                            JOptionPane.ERROR_MESSAGE);
+                    return; // Detener el proceso si hay datos mal formados
+                }
+            }
+
             try {
-                for (int i = 0; i < rowCount; i++) {
-                    String nombreMedicamento = listaMedicamentos.getValueAt(i, 0).toString();
-                    String fechaStr = listaMedicamentos.getValueAt(i, 1).toString();
-
-                    LocalDate fecha;
-                    try {
-                        fecha = LocalDate.parse(fechaStr);
-                    } catch (Exception ex) {
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-dd");
-                        fecha = LocalDate.parse(fechaStr, formatter);
-                    }
-
-                    controller.borrarRecetaMedicamento(nombreMedicamento, fecha);
+                for (Object[] item : itemsToDelete) {
+                    int numeroReceta = (int) item[0];
+                    String codigoMedicamento = (String) item[1];
+                    controller.borrarRecetaMedicamento(numeroReceta, codigoMedicamento);
                 }
 
                 JOptionPane.showMessageDialog(panel1,
@@ -119,11 +141,11 @@ public class View implements PropertyChangeListener{
                         "Éxito",
                         JOptionPane.INFORMATION_MESSAGE);
 
-                controller.refrescar();
+                controller.refrescar(); // Refrescar la tabla después de borrar todo
 
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(panel1,
-                        "Error al eliminar: " + ex.getMessage(),
+                        "Error al eliminar todas las prescripciones: " + ex.getMessage(),
                         "Error",
                         JOptionPane.ERROR_MESSAGE);
             }

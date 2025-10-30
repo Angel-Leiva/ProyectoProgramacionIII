@@ -52,7 +52,7 @@ public class Model {
         this.fechaRetiro = fechaRetiro;
         // también la reflejamos en la receta
         if (recetaActual != null && fechaRetiro != null && !fechaRetiro.isEmpty()) {
-            this.recetaActual.setFechaRetiro(java.time.LocalDate.parse(fechaRetiro));
+            this.recetaActual.setFecha(java.time.LocalDate.parse(fechaRetiro));
         }
     }
 

@@ -85,7 +85,7 @@ public class View implements PropertyChangeListener{
                                         rec.getPaciente().getNombre(),
                                         rec.getPaciente().getId(),
                                         LocalDate.now(),
-                                        rec.getFechaRetiro()
+                                        rec.getFecha()
                                 })
                                 .toArray(Object[][]::new),
                         new String[]{"Nombre Paciente", "Id Paciente", "Fecha de confección", "Fecha de retiro"}

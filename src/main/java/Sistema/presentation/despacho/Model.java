@@ -12,7 +12,7 @@ public class Model {
         this.service = Service.instance();
     }
 
-    public List<Receta> getRecetas() {
+    public List<Receta> getRecetas() throws Exception{
         return service.recetaAll(); // siempre consulta al Service
     }
 }

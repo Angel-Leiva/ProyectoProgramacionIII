@@ -91,7 +91,7 @@ public class Controller {
             receta.setPaciente(model.getPacienteSeleccionado()); // guardamos el puntero al objeto
 
             if (view.getFechaRetiroMedi().getDate() != null) {
-                receta.setFechaRetiro(view.getFechaRetiroMedi().getDate());
+                receta.setFecha(view.getFechaRetiroMedi().getDate());
             }
 
             DefaultTableModel tableModel = (DefaultTableModel) view.getListaMedicamentos().getModel();

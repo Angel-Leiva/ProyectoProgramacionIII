@@ -8,6 +8,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList; // Para manejar listas vacías en caso de error
 import java.util.List;
 
 public class Controller {
@@ -24,7 +25,7 @@ public class Controller {
         view.getBuscarNombreConFiltro().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                buscarPacientes();
+                buscarPacientes(); // Este método ahora maneja sus propias excepciones
             }
         });
 
@@ -35,7 +36,7 @@ public class Controller {
                 if (fila >= 0) {
                     try {
                         String id = (String) view.getResultadosBusqueda().getValueAt(fila, 0); // columna 0 = ID
-                        Paciente seleccionado = Service.instance().pacienteRead(id);
+                        Paciente seleccionado = Service.instance().pacienteRead(id); // Puede lanzar Exception
 
                         //guardamos el puntero en el modelo de prescribir
                         prescribirModel.setPacienteSeleccionado(seleccionado);
@@ -45,7 +46,10 @@ public class Controller {
 
                         view.dispose(); // opcional: cerrar la ventana de búsqueda
                     } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(view, "Error al seleccionar paciente: " + ex.getMessage());
+                        // Usar 'view' es apropiado si la View es un JDialog/JFrame, sino usar 'null'
+                        JOptionPane.showMessageDialog(view, "Error al seleccionar paciente: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        // Opcional: limpiar la selección o refrescar la tabla si hay un problema
+                        actualizarTabla(new ArrayList<>()); // Limpiar tabla si hubo un error de lectura
                     }
                 }
             }
@@ -56,11 +60,17 @@ public class Controller {
         String filtro = view.getBuscarNombreConFiltro().getText();
         String opcion = (String) view.getFiltrarBusqueda().getSelectedItem();
 
-        List<Paciente> resultados;
-        if ("ID".equalsIgnoreCase(opcion)) {
-            resultados = Service.instance().buscarPacientesPorId(filtro);
-        } else {
-            resultados = Service.instance().buscarPacientesPorNombre(filtro);
+        List<Paciente> resultados = new ArrayList<>(); // Inicializar con lista vacía
+        try {
+            if ("ID".equalsIgnoreCase(opcion)) {
+                resultados = Service.instance().buscarPacientesPorId(filtro); // Puede lanzar Exception
+            } else {
+                resultados = Service.instance().buscarPacientesPorNombre(filtro); // Puede lanzar Exception
+            }
+        } catch (Exception ex) {
+            // Usar 'view' es apropiado si la View es un JDialog/JFrame, sino usar 'null'
+            JOptionPane.showMessageDialog(view, "Error al buscar pacientes: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            // La lista 'resultados' permanecerá vacía, lo cual es correcto en caso de error
         }
 
         actualizarTabla(resultados);

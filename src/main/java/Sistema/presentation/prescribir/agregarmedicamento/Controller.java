@@ -19,7 +19,14 @@ public class Controller {
         this.view = view;
         this.listaMedicamentosPrescribir = listaMedicamentosPrescribir;
 
-        view.getBuscarMedicamentoPorFiltro().addActionListener(e -> buscarMedicamentos());
+        view.getBuscarMedicamentoPorFiltro().addActionListener(e -> {
+            try {
+                buscarMedicamentos();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(view, "Error al buscar medicamentos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace(); // Para depuración, puedes quitarlo en producción
+            }
+        });
 
         // Selección del medicamento en la tabla
         view.getListaConResultadosDeBusqueda().addMouseListener(new java.awt.event.MouseAdapter() {
@@ -41,7 +48,7 @@ public class Controller {
         });
     }
 
-    private void buscarMedicamentos() {
+    private void buscarMedicamentos() throws Exception {
         String filtro = view.getBuscarMedicamentoPorFiltro().getText();
         String opcion = (String) view.getFiltrarBusquedaPor().getSelectedItem();
 
