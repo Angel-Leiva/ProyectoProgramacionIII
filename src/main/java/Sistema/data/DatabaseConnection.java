@@ -12,10 +12,17 @@ public class DatabaseConnection {
 
     private static final String URL = "jdbc:mysql://localhost:3306/SistemaMedico?serverTimezone=UTC";
     private static final String USER = "root"; // <-- CAMBIA ESTO
-    private static final String PASSWORD = "Al22-2005"; // <-- CAMBIA ESTO
+    private static final String PASSWORD = "root"; // <-- CAMBIA ESTO
 
-    public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASSWORD);
+    public static Connection getConnection() {
+        try {
+            Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            System.out.println("Conexión exitosa a la base de datos.");
+            return conn;
+        } catch (SQLException e) {
+            System.err.println("Error al conectarse a la base de datos: " + e.getMessage());
+            return null;
+        }
     }
 
     // Métodos para cerrar recursos de forma segura
